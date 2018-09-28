@@ -28,10 +28,6 @@ public class TruncatedSHA1
 
             List<Byte> result = Arrays.asList(ArrayUtils.toObject(fullResult));
 
-            //System.out.println("Full SHA-1 digest:");
-
-            //Main.printBytesAsHex(result);
-
             int digestWholeBytes = digestBitLength / 8;
             int bitsLeft = digestBitLength % 8;
 
