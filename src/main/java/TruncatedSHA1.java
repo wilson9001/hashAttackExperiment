@@ -4,8 +4,17 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class is a wrapper for the native Java SHA-1 implementation. It uses this implementation to return a truncated message digest. <b>Do not use for anything other than experimentation. SHA-1 is considered insecure even before truncating the digest.</b>
+ */
 public class TruncatedSHA1
 {
+    /**
+     * This message creates a truncated SHA-1 digest of a given message.
+     * @param message Message to create SHA-1 hash for
+     * @param digestBitLength Number of bits to make the digest. Full length of normal SHA-1 digest is 160 bits, so putting in this value will return a fully unaltered SHA-1 digest. <b>Do not input values greater than 160</b>
+     * @return The SHA-1 message digest, truncated to the specified number of bits. If the bit count does not fit evenly into bytes, the trailing bits in the last byte will be 0. <b>This output is not cryptographically secure</b>
+     */
     public List<Byte> digestMessage(String message, int digestBitLength)
     {
         try
@@ -19,8 +28,9 @@ public class TruncatedSHA1
 
             List<Byte> result = Arrays.asList(ArrayUtils.toObject(fullResult));
 
-            System.out.println("Full SHA-1 digest:");
-            System.out.println(result);
+            //System.out.println("Full SHA-1 digest:");
+
+            //Main.printBytesAsHex(result);
 
             int digestWholeBytes = digestBitLength / 8;
             int bitsLeft = digestBitLength % 8;
