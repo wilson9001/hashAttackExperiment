@@ -1,20 +1,19 @@
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Main
 {
     static int[] digestBitLength = {8, 12, 16, 20};
     static int rounds = 50;
     static int lengthsToTest = 4;
+    static String preImage = "Matthew10:26,12:36";
 
     public static void main(String arg[])
     {
 
         TruncatedSHA1 sha1_1 = new TruncatedSHA1();
-        TruncatedSHA1 sha1_2 = new TruncatedSHA1();
-        List<Byte> result1, result2;
+        List<Byte> result1, preImageDigest;
         int triesToSuccess;
+        Set<List<Byte>> hashedValuesSet = new HashSet<>();
 
         LinkedList<LinkedList<Integer>> totalRuntimesByLengthCollision = new LinkedList<>();
         LinkedList<LinkedList<Integer>> totalRunTimesByLengthPreImage = new LinkedList<>();
@@ -25,24 +24,34 @@ public class Main
         {
             LinkedList<Integer> currentLengthResultListCollision = new LinkedList<>();
             LinkedList<Integer> currentLengthResultListPreImage = new LinkedList<>();
+            preImageDigest = sha1_1.digestMessage(preImage, digestBitLength[length]);
 
             for (int round = 0; round < rounds; round++)
             {
                 triesToSuccess = 0;
+                hashedValuesSet.add(sha1_1.digestMessage(UUID.randomUUID().toString(), digestBitLength[length]));
+                boolean hasCollision = false;
                 do {
                     triesToSuccess++;
                     result1 = sha1_1.digestMessage(UUID.randomUUID().toString(), digestBitLength[length]);
-                    result2 = sha1_2.digestMessage(UUID.randomUUID().toString(), digestBitLength[length]);
-                } while (!result1.equals(result2));
-                currentLengthResultListCollision.add(triesToSuccess);
 
-                result1 = sha1_1.digestMessage(UUID.randomUUID().toString(), digestBitLength[length]);
+                    if(hashedValuesSet.contains(result1))
+                    {
+                        hasCollision = true;
+                    }
+                    else
+                    {
+                        hashedValuesSet.add(result1);
+                    }
+                } while (!hasCollision);
+                currentLengthResultListCollision.add(triesToSuccess);
+                hashedValuesSet.clear();
 
                 triesToSuccess = 0;
                 do {
                    triesToSuccess++;
-                   result2 = sha1_2.digestMessage(UUID.randomUUID().toString(), digestBitLength[length]);
-                } while(!result1.equals(result2));
+                   result1 = sha1_1.digestMessage(UUID.randomUUID().toString(), digestBitLength[length]);
+                } while(!preImageDigest.equals(result1));
                 currentLengthResultListPreImage.add(triesToSuccess);
             }
             totalRuntimesByLengthCollision.add(currentLengthResultListCollision);

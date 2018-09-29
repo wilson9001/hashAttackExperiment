@@ -1,0 +1,37 @@
+Expected collision times:
+2^(n/2)
+
+n = 8:
+Expected: 2^(8/2) =  16
+Actual:              17
+
+n = 12:
+Expected: 2^(12/2) =   64
+Actual:                79
+
+n = 16:
+Expected: 2^(16/2) =   256
+Actual:                306
+
+n = 20:
+Expected: 2^(20/2) =   1024
+Actual:                1212
+
+Expected PreImage Times:
+2^n
+
+N = 8:
+Expected: 256
+Actual:   258
+
+N=12:
+Expected: 4096
+Actual:   3844
+
+N=16:
+Expected: 65536
+Actual:   50732
+
+N=20:
+Expected: 1048576
+Actual:    928022
